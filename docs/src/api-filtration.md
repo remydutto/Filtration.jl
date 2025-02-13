@@ -4,14 +4,6 @@
 CollapsedDocStrings = true
 ```
 
-Here is the list of imported packages and exported functions.
-
-```@autodocs
-Modules = [Filtration]
-Order = [:module]
-Pages = ["Filtration.jl"]
-Private = false
-```
 
 ## Index
 
