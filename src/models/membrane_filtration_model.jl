@@ -3,7 +3,7 @@
 """
 $(TYPEDSIGNATURES)
 
-A membrane filtration model, based on [Kalboussi17](@cite) 
+A membrane filtration model, based on [Kalboussi17](@cite).
 
 # Contains:
 - a L-function f₁
@@ -15,10 +15,11 @@ A membrane filtration model, based on [Kalboussi17](@cite)
 - a function which describes the dynamic of the cost (x,u) -> f⁰(x,u)
 
 # Constructor
-
+A membrane_filtration_model can be constructed using the following code:
 ```julia
 membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
 ```
+Note that respectively f_1, g and f₂ are tested to be L-functions and K-functions.
 
 ## Arguments
 - f₁ : a L-function
@@ -35,8 +36,6 @@ Canonical = false
 Kalboussi17
 ```
 """
-
-
 struct membrane_filtration_model
     # Parameters
     f₁::Function
@@ -46,23 +45,7 @@ struct membrane_filtration_model
     f₋::Function
     state_dynamic::Function
     cost_dynamic::Function
-
-    """
-    $(TYPEDSIGNATURES)
-
-    Constructor for a membrane filtration model, 
-
-    # Arguments
-    - f₁ : a L-function 
-    - f₂ : a K-function
-    - g : a L-function
-
-    # Returns
-    - a membrane_filtration_model
-
     
-
-    """
     function membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
         if !(isLfunction(f₁))
             display(L"Please verify that $f_1$ is a smooth $\mathcal L$-function : decreasing with $\lim_{x \to \infty} f_1(x) = 0$.")
@@ -97,6 +80,80 @@ struct membrane_filtration_model
     end
 end
 
+"""
+$(TYPEDSIGNATURES)
+
+Check if a vector is monotonic, with respect to a given comparison operator.
+
+# Arguments
+- V : a vector
+- cmp : a comparison operator
+
+# Returns
+- a boolean
+
+"""
+function ismonotonic(V::AbstractVector, cmp = >)
+    current = V[begin]
+    for i ∈ 1:length(V)-1
+        newval = V[i+1]
+        !cmp(current, newval) && return false
+        current = newval
+    end
+    return true
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Check if a function is a L-function.
+
+# Arguments
+- f : a function
+- start : the start of the domain
+- stop : the end of the domain
+- N : the number of points
+- ε : the precision
+
+# Returns
+- a boolean
+
+"""
+function isLfunction(f::Function; start = 0, stop = 100, N = 100, ε = 10^-9)
+    x = range(start, stop, N)
+    y = f(x)
+    !(ismonotonic(y,>)) && return false # Test of decreasing value   
+    y < zero(y) && return false # Test of positive value on positive domain
+    f(10^12)> ε && return false # Test of lim = 0
+    return true
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Check if a function is a K-function.
+
+# Arguments
+- f : a function
+- start : the start of the domain
+- stop : the end of the domain
+- N : the number of points
+- ε : the precision
+
+# Returns
+- a boolean
+
+"""
+function isKfunction(f::Function; start = 0, stop = 100, N = 100, ε = 10^-9)
+    x = range(start, stop, N)
+    y = f(x)
+    !(ismonotonic(y,<)) && return false # Test of increasing value
+    y < zero(y) && return false # Test of positive value on positive domain
+    abs(f(0))> ε && return false # Test of lim = 0
+    return true
+end
+
+
 function get_roots(model::membrane_filtration_model)
     @variables m
     Dₘ = Differential(m)
@@ -115,32 +172,4 @@ function get_roots(model::membrane_filtration_model)
     roots = real(roots[ind])
     Dν = [substitute(Dν, m=>real(roots[i])) for i ∈ 1:length(roots)]
     return roots, Dν
-end
-
-function ismonotonic(V::AbstractVector, cmp = >)
-    current = V[begin]
-    for i ∈ 1:length(V)-1
-        newval = V[i+1]
-        !cmp(current, newval) && return false
-        current = newval
-    end
-    return true
-end
-
-function isLfunction(f::Function; start = 0, stop = 100, N = 100, ε = 10^-9)
-    x = range(start, stop, N)
-    y = f(x)
-    !(ismonotonic(y,>)) && return false # Test of decreasing value   
-    y < zero(y) && return false # Test of positive value on positive domain
-    f(10^12)> ε && return false # Test of lim = 0
-    return true
-end
-
-function isKfunction(f::Function; start = 0, stop = 100, N = 100, ε = 10^-9)
-    x = range(start, stop, N)
-    y = f(x)
-    !(ismonotonic(y,<)) && return false # Test of increasing value
-    y < zero(y) && return false # Test of positive value on positive domain
-    abs(f(0))> ε && return false # Test of lim = 0
-    return true
 end
