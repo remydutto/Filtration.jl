@@ -1,6 +1,6 @@
-# CTApp
+# Filtration Package
 
-Documentation for [CTApp](https://github.com/control-toolbox/CTApp.jl).
+Documentation for [Filtration](https://github.com/remydutto/Filtration.jl.jl).
 
 ## Dependencies
 

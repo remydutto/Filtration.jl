@@ -1,9 +1,9 @@
 using Test
 using Aqua
-using CTApp
+using Filtration
 
 #
-@testset verbose = true showtiming = true "CTApp tests" begin
+@testset verbose = true showtiming = true "Filtration tests" begin
     for name in (:aqua, :default)
         @testset "$(name)" begin
             test_name = Symbol(:test_, name)

@@ -1,4 +1,4 @@
-module CTApp
+module Filtration
 
 greet() = print("Hello World!")
 
