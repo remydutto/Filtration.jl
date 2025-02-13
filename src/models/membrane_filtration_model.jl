@@ -1,4 +1,4 @@
-# Benyahia & al. model
+# Membrane Filtration Model
 
 """
 Struct for a membrane filtration model 
