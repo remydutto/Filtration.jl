@@ -32,6 +32,17 @@ This repository is a package for the control of filtration systems
 | Code Status       | [![Build Status][ci-img]][ci-url] [![Covering Status][co-img]][co-url] [![Aqua.jl][aqua-img]][aqua-url] [![Code Style: Blue][blue-img]][blue-url] |
 | Licence           | [![License: MIT][licence-img]][licence-url]   |
 
+## Install 
+
+To install OptimalControl.jl please 
+<a href="https://docs.julialang.org/en/v1/manual/getting-started/">open Julia's interactive session (known as REPL)</a> 
+and press <kbd>]</kbd> key in the REPL to use the package mode, then add the package:
+
+```julia
+julia> ]
+pkg> add https://github.com/remydutto/Filtration.jl
+```
+
 ## Contributing
 
 [issue-url]: https://github.com/remydutto/Filtration.jl/issues

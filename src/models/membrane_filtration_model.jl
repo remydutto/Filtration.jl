@@ -1,13 +1,18 @@
 # Benyahia & al. model
 
 """
-Struct for Benyahia & al. model
+Struct for a membrane filtration model 
 
 Contains:
-- data required to create the model
-
+- an L-function f₁
+- a K-function f₂
+- a K-function g
+- the function f₊
+- the function f₋
+- a function which describes the dynamic of the state
+- a function which describes the dynamic of the cost
 """
-struct Benyahia
+struct membrane_filtration_model
     # Parameters
     f₁::Function
     f₂::Function
@@ -17,7 +22,7 @@ struct Benyahia
     state_dynamic::Function
     cost_dynamic::Function
 
-    function Benyahia(f₁::Function, f₂::Function, g::Function)
+    function membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
         if !(isLfunction(f₁))
             display(L"Please verify that $f_1$ is a smooth $\mathcal L$-function : decreasing with $\lim_{x \to \infty} f_1(x) = 0$.")
             display(plot(f₁, label = "f₁", size = (500, 300)))
@@ -51,7 +56,7 @@ struct Benyahia
     end
 end
 
-function get_roots(model::Benyahia)
+function get_roots(model::membrane_filtration_model)
     @variables m
     Dₘ = Differential(m)
 

@@ -13,7 +13,7 @@ using Symbolics, Nemo
 include("models/Benyahia_and_al.jl")
 
 # export functions only for user
-export Benyahia
+export membrane_filtration_model
 export ismonotonic, isLfunction, isKfunction
 export get_roots
 
