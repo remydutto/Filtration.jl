@@ -10,7 +10,7 @@ using Symbolics, Nemo
 
 # include 
 
-include("models/Benyahia_and_al.jl")
+include("models/membrane_filtration_model.jl")
 
 # export functions only for user
 export membrane_filtration_model

@@ -7,9 +7,9 @@ CollapsedDocStrings = true
 Here is the list of imported packages and exported functions.
 
 ```@autodocs
-Modules = [CTBase, Base]
+Modules = [Filtration]
 Order = [:module]
-Pages = ["CTBase.jl"]
+Pages = ["Filtration.jl"]
 Private = false
 ```
 
