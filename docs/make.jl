@@ -1,4 +1,6 @@
 using Documenter
+push!(LOAD_PATH,"../src/")
+using Filtration
 
 repo_url = "github.com/remydutto/Filtration.jl"
 
