@@ -2,6 +2,11 @@ using Documenter, DocumenterCitations
 push!(LOAD_PATH,"../src/")
 using Filtration
 
+# to add docstrings from external packages
+Module = Filtration
+isnothing(DocMeta.getdocmeta(Module, :DocTestSetup)) &&
+        DocMeta.setdocmeta!(Module, :DocTestSetup, :(using $Module); recursive=true)
+
 repo_url = "github.com/remydutto/Filtration.jl"
 
 bib = CitationBibliography(

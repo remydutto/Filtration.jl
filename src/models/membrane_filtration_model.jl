@@ -28,13 +28,6 @@ Note that respectively f_1, g and f₂ are tested to be L-functions and K-functi
 
 ## Returns
 - a membrane_filtration_model
-
-# References
-```@bibliography
-Pages = []
-Canonical = false
-Kalboussi17
-```
 """
 struct membrane_filtration_model
     # Parameters
