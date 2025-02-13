@@ -3,9 +3,9 @@
 """
 $(TYPEDSIGNATURES)
 
-Struct for a membrane filtration model 
+A membrane filtration model, based on [Kalboussi17](@cite) 
 
-Contains:
+# Contains:
 - a L-function f₁
 - a K-function f₂
 - a L-function g
@@ -13,7 +13,30 @@ Contains:
 - the function f₋
 - a function which describes the dynamic of the state (x,u) -> f(x,u)
 - a function which describes the dynamic of the cost (x,u) -> f⁰(x,u)
+
+# Constructor
+
+```julia
+membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
+```
+
+## Arguments
+- f₁ : a L-function
+- f₂ : a K-function
+- g : a L-function
+
+## Returns
+- a membrane_filtration_model
+
+# References
+```@bibliography
+Pages = []
+Canonical = false
+Kalboussi17
+```
 """
+
+
 struct membrane_filtration_model
     # Parameters
     f₁::Function
@@ -27,7 +50,7 @@ struct membrane_filtration_model
     """
     $(TYPEDSIGNATURES)
 
-    Constructor for a membrane filtration model, based on [Kalboussi17](@cite)
+    Constructor for a membrane filtration model, 
 
     # Arguments
     - f₁ : a L-function 
@@ -37,12 +60,7 @@ struct membrane_filtration_model
     # Returns
     - a membrane_filtration_model
 
-    # References
-    ```@bibliography
-    Pages = []
-    Canonical = false
-    Kalboussi17
-    ```
+    
 
     """
     function membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
