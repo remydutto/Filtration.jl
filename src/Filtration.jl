@@ -1,4 +1,4 @@
-using DocStringExtensions
+using DocumenterCitations
 
 """
 [`Filtration`](@ref) module.
