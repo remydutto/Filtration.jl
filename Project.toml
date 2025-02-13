@@ -4,6 +4,7 @@ authors = ["Rémy Dutto <remy.dutto@orange.fr>"]
 version = "0.1.0"
 
 [deps]
+DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 Nemo = "2edaba10-b0f1-5616-af89-8c11ac63239a"
@@ -11,6 +12,7 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 
 [compat]
+DocStringExtensions = "0.9.3"
 ForwardDiff = "0.10.38"
 LaTeXStrings = "1.4.0"
 Nemo = "0.48.4"
