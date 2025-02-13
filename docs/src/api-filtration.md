@@ -4,6 +4,7 @@
 CollapsedDocStrings = true
 ```
 
+For the developers, here are the [private methods](@ref dev-filtration).
 
 ## Index
 
@@ -12,8 +13,6 @@ Pages   = ["api-filtration.md"]
 Modules = [Filtration]
 Order   = [:module, :constant, :type, :function, :macro]
 ```
-
-For the developers, here are the [private methods](@ref dev-filtration).
 
 ## Documentation
 

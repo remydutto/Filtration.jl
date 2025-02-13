@@ -15,7 +15,7 @@ A membrane filtration model, based on [Kalboussi17](@cite).
 - a function which describes the dynamic of the cost (x,u) -> f⁰(x,u)
 
 # Constructor
-A membrane_filtration_model can be constructed using the following code:
+A membrane filtration model can be constructed using the following code:
 ```julia
 membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
 ```
@@ -27,7 +27,7 @@ Note that respectively f_1, g and f₂ are tested to be L-functions and K-functi
 - g : a L-function
 
 ## Returns
-- a membrane_filtration_model
+- a membrane filtration model
 """
 struct membrane_filtration_model
     # Parameters
@@ -80,7 +80,7 @@ Check if a vector is monotonic, with respect to a given comparison operator.
 
 # Arguments
 - V : a vector
-- cmp : a comparison operator
+- cmp : a comparison operator, initialized to >
 
 # Returns
 - a boolean
@@ -103,10 +103,10 @@ Check if a function is a L-function.
 
 # Arguments
 - f : a function
-- start : the start of the domain
-- stop : the end of the domain
-- N : the number of points
-- ε : the precision
+- start : the start of the domain, initialized to 0
+- stop : the end of the domain, initialized to 100
+- N : the number of points, initialized to 100
+- ε : the precision, initialized to 10^-9
 
 # Returns
 - a boolean
@@ -128,10 +128,10 @@ Check if a function is a K-function.
 
 # Arguments
 - f : a function
-- start : the start of the domain
-- stop : the end of the domain
-- N : the number of points
-- ε : the precision
+- start : the start of the domain, initialized to 0
+- stop : the end of the domain, initialized to 100
+- N : the number of points, initialized to 100
+- ε : the precision, initialized to 10^-9
 
 # Returns
 - a boolean
