@@ -1,0 +1,6 @@
+[deps]
+Filtration = "8171f1f2-2abc-474a-96b5-c6c0d316237d"
+MadNLP = "2621e9c9-9eb4-46b1-8089-e8c72242dfb6"
+NLPModelsIpopt = "f4238b75-b362-5c4c-b852-0801c9a21d71"
+OptimalControl = "5f98b655-cc9a-415a-b60e-744165666948"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
