@@ -1,5 +1,7 @@
 module Filtration
 
+greet() = print("Hello World!")
+
 # using
 using LaTeXStrings
 using Plots
