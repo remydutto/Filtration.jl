@@ -4,7 +4,7 @@
 Struct for a membrane filtration model 
 
 Contains:
-- an L-function f₁
+- an ''\\mathcal{L}''-function f₁
 - a K-function f₂
 - a K-function g
 - the function f₊
