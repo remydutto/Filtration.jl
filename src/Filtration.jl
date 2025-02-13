@@ -1,5 +1,16 @@
-module Filtration
+"""
+[`Filtration`](@ref) module.
 
+Lists all the imported modules and packages:
+
+$(IMPORTS)
+
+List of all the exported names:
+
+$(EXPORTS)
+"""
+
+module Filtration
 greet() = print("Hello World!")
 
 # using

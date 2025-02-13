@@ -1,16 +1,18 @@
 # Membrane Filtration Model
 
 """
+$(TYPEDSIGNATURES)
+
 Struct for a membrane filtration model 
 
 Contains:
-- an ''\\mathcal{L}''-function f₁
+- a L-function f₁
 - a K-function f₂
-- a K-function g
+- a L-function g
 - the function f₊
 - the function f₋
-- a function which describes the dynamic of the state
-- a function which describes the dynamic of the cost
+- a function which describes the dynamic of the state (x,u) -> f(x,u)
+- a function which describes the dynamic of the cost (x,u) -> f⁰(x,u)
 """
 struct membrane_filtration_model
     # Parameters
@@ -22,6 +24,27 @@ struct membrane_filtration_model
     state_dynamic::Function
     cost_dynamic::Function
 
+    """
+    $(TYPEDSIGNATURES)
+
+    Constructor for a membrane filtration model, based on [Kalboussi17](@cite)
+
+    # Arguments
+    - f₁ : a L-function 
+    - f₂ : a K-function
+    - g : a L-function
+
+    # Returns
+    - a membrane_filtration_model
+
+    # References
+    ```@bibliography
+    Pages = []
+    Canonical = false
+    Kalboussi17
+    ```
+
+    """
     function membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
         if !(isLfunction(f₁))
             display(L"Please verify that $f_1$ is a smooth $\mathcal L$-function : decreasing with $\lim_{x \to \infty} f_1(x) = 0$.")
