@@ -1,4 +1,4 @@
-using Documenter, DocumenterCitations
+using Documenter
 push!(LOAD_PATH,"../src/")
 using Filtration
 
@@ -8,11 +8,6 @@ isnothing(DocMeta.getdocmeta(Module, :DocTestSetup)) &&
         DocMeta.setdocmeta!(Module, :DocTestSetup, :(using $Module); recursive=true)
 
 repo_url = "github.com/remydutto/Filtration.jl"
-
-bib = CitationBibliography(
-    joinpath(@__DIR__, "src", "refs.bib");
-    style=:numeric
-)
 
 makedocs(;
     remotes=nothing,

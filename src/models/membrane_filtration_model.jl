@@ -3,7 +3,7 @@
 """
 $(TYPEDSIGNATURES)
 
-A membrane filtration model, based on [Kalboussi17](@cite).
+A membrane filtration model.
 
 # Contains:
 - a L-function f₁
