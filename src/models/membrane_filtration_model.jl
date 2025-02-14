@@ -157,7 +157,7 @@ Construct the function ψ by using ForwardDiff.
 # Returns
 - ψ : the function ψ
 """
-function get_ψ(model::MembraneFiltrationModel)
+function get_psi(model::MembraneFiltrationModel)
     f₊, f₋, g = model.f₊, model.f₋, model.g
     df₊(m) = ForwardDiff.derivative(f₊, m)
     df₋(m) = ForwardDiff.derivative(f₋, m)
@@ -220,7 +220,7 @@ Compute a root of the function ψ by using ForwardDiff.
 
 """
 function get_root(model::MembraneFiltrationModel, x₀::Real = 0.5)
-    ψ = get_ψ(model)
+    ψ = get_psi(model)
     root = find_zero(ψ, x₀)
     return root
 end

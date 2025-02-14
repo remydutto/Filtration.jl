@@ -61,8 +61,8 @@ f_+(m) = \frac{f_1(m) + f_2(m)}{2} \quad f_-(m) = \frac{f_1(m) -f_2(m)}{2} \cdot
 For more information about why this property is needed, please refer to [[Kalboussi et al., 2018](https://doi.org/10.1016/j.ifacol.2017.08.1554)]. However, we can take a look on this function $\psi$. 
 
 
-```@example
-ψ = get_ψ(model)
+```@example main
+ψ = get_psi(model)
 root = get_root(model)
 plot(range(0,10, 100), ψ, label = "ψ")
 scatter!([root], [ψ(root)], label = "zero of ψ")
@@ -72,7 +72,7 @@ scatter!([root], [ψ(root)], label = "zero of ψ")
 
 We can solve the optimal control problem by derect method, thanks to the [OptimalControl.jl](https://control-toolbox.org/OptimalControl.jl) package.
 
-```@example
+```@example main
 t0 = 0; m0 = 1; tf = 10;                # initial and final time and state
 @def ocp begin                          # problem definition
     t ∈ [ t0, tf ], time

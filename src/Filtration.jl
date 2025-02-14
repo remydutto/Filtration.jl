@@ -29,6 +29,6 @@ include("models/membrane_filtration_model.jl")
 export MembraneFiltrationModel
 export ismonotonic, isLfunction, isKfunction
 export get_root, get_roots_symbolic_algebraic_fraction
-export get_ψ
+export get_psi
 
 end
