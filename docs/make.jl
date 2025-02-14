@@ -23,7 +23,6 @@ makedocs(;
         "Developpers" => "dev-filtration.md",
         "References" => "references.md"
         ],
-    plugins=[bib],
 )
 
 deploydocs(; repo=repo_url * ".git", devbranch="main")
