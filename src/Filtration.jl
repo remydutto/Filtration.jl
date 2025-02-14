@@ -26,9 +26,9 @@ greet() = print("Hello World!")
 include("models/membrane_filtration_model.jl")
 
 # export functions only for user
-export membrane_filtration_model
+export MembraneFiltrationModel
 export ismonotonic, isLfunction, isKfunction
 export get_root, get_roots_symbolic_algebraic_fraction
-export get_η
+export get_ψ
 
 end

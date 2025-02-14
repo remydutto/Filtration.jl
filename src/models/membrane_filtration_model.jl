@@ -17,7 +17,7 @@ A membrane filtration model.
 # Constructor
 A membrane filtration model can be constructed using the following code:
 ```julia
-membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
+MembraneFiltrationModel(f₁::Function, f₂::Function, g::Function)
 ```
 Note that respectively f_1, g and f₂ are tested to be L-functions and K-functions.
 
@@ -27,9 +27,9 @@ Note that respectively f_1, g and f₂ are tested to be L-functions and K-functi
 - g : a L-function
 
 ## Returns
-- a membrane filtration model
+- a MembraneFiltrationModel
 """
-struct membrane_filtration_model
+struct MembraneFiltrationModel
     # Parameters
     f₁::Function
     f₂::Function
@@ -39,7 +39,7 @@ struct membrane_filtration_model
     state_dynamic::Function
     cost_dynamic::Function
     
-    function membrane_filtration_model(f₁::Function, f₂::Function, g::Function)
+    function MembraneFiltrationModel(f₁::Function, f₂::Function, g::Function)
         if !(isLfunction(f₁))
             display(L"Please verify that $f_1$ is a smooth $\mathcal L$-function : decreasing with $\lim_{x \to \infty} f_1(x) = 0$.")
             display(plot(f₁, label = "f₁", size = (500, 300)))
@@ -55,10 +55,10 @@ struct membrane_filtration_model
             display(plot(f₂, label = "f₂", size = (500, 300)))
             error("Wrong definition of inputs functions")
         end
-        f₊ = m -> 0.5 * (f₁(m) + f₂(m)) 
-        f₋ = m -> 0.5 * (f₁(m) - f₂(m))
-        state_dynamic = (m,u) -> f₋(m) + u * f₊(m)
-        cost_dynamic = (m,u) -> u * g(m) 
+        f₊(m) = 0.5 * (f₁(m) + f₂(m)) 
+        f₋(m) = 0.5 * (f₁(m) - f₂(m))
+        state_dynamic(m,u) = f₋(m) + u * f₊(m)
+        cost_dynamic(m,u) = u * g(m) 
 
         model = new(
             f₁,
@@ -149,78 +149,78 @@ end
 """
 $(TYPEDSIGNATURES)
 
-Construct the function ν by using ForwardDiff.
+Construct the function ψ by using ForwardDiff.
 
 # Arguments
-- model : a membrane filtration model
+- model : a MembraneFiltrationModel
 
 # Returns
-- ν : the function ν
+- ψ : the function ψ
 """
-function get_η(model::membrane_filtration_model)
+function get_ψ(model::MembraneFiltrationModel)
     f₊, f₋, g = model.f₊, model.f₋, model.g
     df₊(m) = ForwardDiff.derivative(f₊, m)
     df₋(m) = ForwardDiff.derivative(f₋, m)
     dg(m) = ForwardDiff.derivative(g, m)
-    ν(m) = g(m) * (df₋(m) * f₊(m) - f₋(m) * df₊(m)) + dg(m) * f₊(m) * f₋(m)
-    return ν
+    ψ(m) = g(m) * (df₋(m) * f₊(m) - f₋(m) * df₊(m)) + dg(m) * f₊(m) * f₋(m)
+    return ψ
 end
 
 """
 $(TYPEDSIGNATURES)
 
-Compute the positive roots of the function ν and its derivative by using Symbolics. 
-This function works only if the function ν is an algebraic fraction.
+Compute the positive roots of the function ψ and its derivative by using Symbolics. 
+This function works only if the function ψ is an algebraic fraction.
 
 !!! note
     This function may be long to compute due to the use of Symbolics. 
-    However, if it compute, it assure that all positive roots of ν are given.
-    If ν have only one positive root, use get_roots instead.
+    However, if it compute, it assure that all positive roots of ψ are given.
+    If ψ have only one positive root, use get_roots instead.
 
 # Arguments
-- model : a membrane filtration model
+- model : a MembraneFiltrationModel
 
 # Returns
-- roots : the positive roots of ν
-- Dν : the derivative of ν at the roots
+- roots : the positive roots of ψ
+- Dψ : the derivative of ψ at the roots
 
 """
-function get_roots_symbolic_algebraic_fraction(model::membrane_filtration_model)
+function get_roots_symbolic_algebraic_fraction(model::MembraneFiltrationModel)
     @variables m
     Dₘ = Differential(m)
     g = model.g(m); f₊ = model.f₊(m); f₋ = model.f₋(m)
     Df₊ = Dₘ(f₊); Df₋ = Dₘ(f₋); Dg  = Dₘ(g)
-    ν = g * (Df₋ * f₊ - f₋ * Df₊) + Dg * f₊ * f₋
-    ν = simplify(expand_derivatives(ν))
-    Dν = simplify(expand_derivatives(Dₘ(ν)))
-    num, _ = Symbolics.arguments(Symbolics.value(ν))
+    ψ = g * (Df₋ * f₊ - f₋ * Df₊) + Dg * f₊ * f₋
+    ψ = simplify(expand_derivatives(ψ))
+    Dψ = simplify(expand_derivatives(Dₘ(ψ)))
+    num, _ = Symbolics.arguments(Symbolics.value(ψ))
     roots = symbolic_solve(num~0, m);
     roots = [Symbolics.symbolic_to_float(roots[i]) for i ∈ 1:length(roots)]
     ind = findall(x -> real(x)>0 && isreal(x), roots)
     roots = real(roots[ind])
-    Dν = [substitute(Dν, m=>real(roots[i])) for i ∈ 1:length(roots)]
-    return roots, Dν
+    Dψ = [substitute(Dψ, m=>real(roots[i])) for i ∈ 1:length(roots)]
+    return roots, Dψ
 end
 
 """
 $(TYPEDSIGNATURES)
 
-Compute a root of the function ν by using ForwardDiff.
+Compute a root of the function ψ by using ForwardDiff.
 
 !!! note
-    This function return a root of ν. 
-    If ν have multiple roots, it may not return the desired one.
+    This function return a root of ψ. 
+    If ψ have multiple roots, it may not return the desired one.
 
 # Arguments
-- model : a membrane filtration model
+- model : a MembraneFiltrationModel
 - x₀ : the initial guess, initialized to 0.5
 
 # Returns
-- roots : a root of ν
+- roots : a root of ψ
 
 """
-function get_root(model::membrane_filtration_model, x₀::Real = 0.5)
-    ν = get_η(model)
-    root = find_zero(ν, x₀)
+function get_root(model::MembraneFiltrationModel, x₀::Real = 0.5)
+    ψ = get_ψ(model)
+    root = find_zero(ψ, x₀)
     return root
 end

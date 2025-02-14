@@ -19,6 +19,7 @@ makedocs(;
         size_threshold_ignore=["index.md"],
     ),
     pages=["Introduction" => "index.md",
+        "Basic Example" => "basic-example.md",
         "API" => "api-filtration.md",
         "Developpers" => "dev-filtration.md",
         "References" => "references.md"
