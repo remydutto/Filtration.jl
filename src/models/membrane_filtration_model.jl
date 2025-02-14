@@ -112,7 +112,7 @@ Check if a function is a L-function.
 - a boolean
 
 """
-function isLfunction(f::Function; start = 0, stop = 100, N = 100, ε = 10^-9)
+function isLfunction(f::Function; start::Int = 0, stop::Int = 100, N::Int = 100, ε::Real = 10^-9)
     x = range(start, stop, N)
     y = f(x)
     !(ismonotonic(y,>)) && return false # Test of decreasing value   
@@ -137,7 +137,7 @@ Check if a function is a K-function.
 - a boolean
 
 """
-function isKfunction(f::Function; start = 0, stop = 100, N = 100, ε = 10^-9)
+function isKfunction(f::Function; start::Int = 0, stop::Int = 100, N::Int = 100, ε::Real = 10^-9)
     x = range(start, stop, N)
     y = f(x)
     !(ismonotonic(y,<)) && return false # Test of increasing value
@@ -146,15 +146,50 @@ function isKfunction(f::Function; start = 0, stop = 100, N = 100, ε = 10^-9)
     return true
 end
 
+"""
+$(TYPEDSIGNATURES)
 
-function get_roots(model::membrane_filtration_model)
+Construct the function ν by using ForwardDiff.
+
+# Arguments
+- model : a membrane filtration model
+
+# Returns
+- ν : the function ν
+"""
+function get_η(model::membrane_filtration_model)
+    f₊, f₋, g = model.f₊, model.f₋, model.g
+    df₊(m) = ForwardDiff.derivative(f₊, m)
+    df₋(m) = ForwardDiff.derivative(f₋, m)
+    dg(m) = ForwardDiff.derivative(g, m)
+    ν(m) = g(m) * (df₋(m) * f₊(m) - f₋(m) * df₊(m)) + dg(m) * f₊(m) * f₋(m)
+    return ν
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Compute the positive roots of the function ν and its derivative by using Symbolics. 
+This function works only if the function ν is an algebraic fraction.
+
+!!! note
+    This function may be long to compute due to the use of Symbolics. 
+    However, if it compute, it assure that all positive roots of ν are given.
+    If ν have only one positive root, use get_roots instead.
+
+# Arguments
+- model : a membrane filtration model
+
+# Returns
+- roots : the positive roots of ν
+- Dν : the derivative of ν at the roots
+
+"""
+function get_roots_symbolic_algebraic_fraction(model::membrane_filtration_model)
     @variables m
     Dₘ = Differential(m)
-
     g = model.g(m); f₊ = model.f₊(m); f₋ = model.f₋(m)
-
     Df₊ = Dₘ(f₊); Df₋ = Dₘ(f₋); Dg  = Dₘ(g)
-
     ν = g * (Df₋ * f₊ - f₋ * Df₊) + Dg * f₊ * f₋
     ν = simplify(expand_derivatives(ν))
     Dν = simplify(expand_derivatives(Dₘ(ν)))
@@ -165,4 +200,27 @@ function get_roots(model::membrane_filtration_model)
     roots = real(roots[ind])
     Dν = [substitute(Dν, m=>real(roots[i])) for i ∈ 1:length(roots)]
     return roots, Dν
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Compute a root of the function ν by using ForwardDiff.
+
+!!! note
+    This function return a root of ν. 
+    If ν have multiple roots, it may not return the desired one.
+
+# Arguments
+- model : a membrane filtration model
+- x₀ : the initial guess, initialized to 0.5
+
+# Returns
+- roots : a root of ν
+
+"""
+function get_root(model::membrane_filtration_model, x₀::Real = 0.5)
+    ν = get_η(model)
+    root = find_zero(ν, x₀)
+    return root
 end

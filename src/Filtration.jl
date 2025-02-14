@@ -17,6 +17,7 @@ using LaTeXStrings
 using Plots
 using ForwardDiff
 using Symbolics, Nemo
+using Roots
 
 # useless function
 greet() = print("Hello World!")
@@ -27,6 +28,7 @@ include("models/membrane_filtration_model.jl")
 # export functions only for user
 export membrane_filtration_model
 export ismonotonic, isLfunction, isKfunction
-export get_roots
+export get_root, get_roots_symbolic_algebraic_fraction
+export get_η
 
 end
