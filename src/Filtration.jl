@@ -18,6 +18,9 @@ using Plots
 using ForwardDiff
 using Symbolics, Nemo
 using Roots
+using OptimalControl
+using OrdinaryDiffEq
+using MINPACK
 
 # useless function
 greet() = print("Hello World!")
@@ -28,7 +31,8 @@ include("models/membrane_filtration_model.jl")
 # export functions only for user
 export MembraneFiltrationModel
 export ismonotonic, isLfunction, isKfunction
-export get_root, get_roots_symbolic_algebraic_fraction
-export get_psi
+export singular_state, singular_control, singular_costate
+export get_psi, get_phi, get_dphi
+export delta_t_end
 
 end

@@ -31,7 +31,7 @@ using MadNLP
 In this example, these functions are defined by using the [[Benyahia et al.](https://www.researchgate.net/publication/272506325_A_simple_model_of_anaerobic_membrane_bioreactor_for_control_design_coupling_the_AM2b_model_with_a_simple_membrane_fouling_dynamics)] model : 
 
 ```math
-f_1(m) = \frac{b}{e+m}, \quad f_2(m) = am, \quad f_3(m) = \frac{1}{e+m}, 
+f_1(m) = \frac{b}{e+m}, f_2(m) = am, \quad f_3(m) = \frac{1}{e+m}, 
 ```
 where $a$, $b$ and $e$ are positive numbers. The problem is simply defined, thanks to `MembraneFiltrationModel`.
 
@@ -55,7 +55,7 @@ With this model, we know that the function $\psi$ defined by
 have an unique positive root, denoted $\bar m$, where function $f_+$ and $f_-$ are given by 
 
 ```math
-f_+(m) = \frac{f_1(m) + f_2(m)}{2} \quad f_-(m) = \frac{f_1(m) -f_2(m)}{2} \cdot
+f_+(m) = \frac{f_1(m) + f_2(m)}{2} \quad \text{and} \quad f_-(m) = \frac{f_1(m) -f_2(m)}{2} \cdot
 ```
 
 For more information about why this property is needed, please refer to [[Kalboussi et al., 2018](https://doi.org/10.1016/j.ifacol.2017.08.1554)]. However, we can take a look on this function $\psi$. 

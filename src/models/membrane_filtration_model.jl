@@ -175,7 +175,7 @@ This function works only if the function ψ is an algebraic fraction.
 !!! note
     This function may be long to compute due to the use of Symbolics. 
     However, if it compute, it assure that all positive roots of ψ are given.
-    If ψ have only one positive root, use get_roots instead.
+    If ψ have only one positive root, use singular_state instead.
 
 # Arguments
 - model : a MembraneFiltrationModel
@@ -205,10 +205,47 @@ end
 """
 $(TYPEDSIGNATURES)
 
-Compute a root of the function ψ by using ForwardDiff.
+Construct the function Φ.
+
+# Arguments
+- model : a MembraneFiltrationModel
+
+# Returns
+- Φ : the function Φ
+"""
+function get_phi(model::MembraneFiltrationModel)
+    Φ(m, λ) = λ * model.f₊(m) + model.g(m)
+    return Φ
+end
+
+
+"""
+$(TYPEDSIGNATURES)
+
+Construct the function dΦ.
+
+# Arguments
+- model : a MembraneFiltrationModel
+
+# Returns
+- dΦ : the function dΦ
+"""
+function get_dphi(model::MembraneFiltrationModel)
+    f₊, f₋ = model.f₊, model.f₋
+    df₊(m) = ForwardDiff.derivative(f₊, m)
+    df₋(m) = ForwardDiff.derivative(f₋, m)
+    ψ = get_psi(model)
+    Φ = get_phi(model)
+    dΦ(m, λ) = ψ(m)/f₊(m) + Φ(m, λ) * (df₊(m) * f₋(m) - df₋(m) * f₊(m)) / f₊(m)
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Give the singular state by finding the root of the function ψ by using ForwardDiff.
 
 !!! note
-    This function return a root of ψ. 
+    The singular state is a root of ψ. 
     If ψ have multiple roots, it may not return the desired one.
 
 # Arguments
@@ -216,11 +253,81 @@ Compute a root of the function ψ by using ForwardDiff.
 - x₀ : the initial guess, initialized to 0.5
 
 # Returns
-- roots : a root of ψ
+- m : the singular state
 
 """
-function get_root(model::MembraneFiltrationModel, x₀::Real = 0.5)
+function singular_state(model::MembraneFiltrationModel, x₀::Real = 0.5)
     ψ = get_psi(model)
-    root = find_zero(ψ, x₀)
-    return root
+    mₛ = find_zero(ψ, x₀)
+    return mₛ
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Compute the singular control of the membrane filtration model.
+
+# Arguments
+- model : a MembraneFiltrationModel
+- x₀ : the initial guess, initialized to 0.5
+
+# Returns
+- uₛ : the singular control
+
+"""
+function singular_control(model::MembraneFiltrationModel, x0::Real = 0.5 )
+    mₛ = singular_state(model, x0)
+    uₛ = - model.f₋(mₛ) / model.f₊(mₛ)
+    return uₛ
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Compute the singular costate of the membrane filtration model.
+
+# Arguments
+- model : a MembraneFiltrationModel
+
+# Returns
+- λₛ : the singular costate
+
+"""
+function singular_costate(model::MembraneFiltrationModel, x₀::Real = 0.5)
+    mₛ = singular_state(model, x₀)
+    λₛ = -model.g(mₛ) / model.f₊(mₛ)
+    return λₛ
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Compute the difference of time Δt = tf - t2 by an indirect solve of the membrane filtration optimal control problem 
+starting at the singular state and singular_costate.
+This leads to find a zero (which is the final switching time t2) of a scalar function S.
+
+# Arguments
+- model : a MembraneFiltrationModel
+- t_guess : the initial guess, initialized to 5
+
+# Returns
+- Δt = tf-t2 : the time to reach the final time tf from the end of the singular arc
+
+"""
+function delta_t_end(model, t_guess = 5)
+    tf = 10
+    mₛ = singular_state(model)
+    λₛ = singular_costate(model)
+    ϕ₊ = Flow(ocp, (x,p) -> 1)
+
+    function S(t2)
+         _, λf = ϕ₊(t2[1], mₛ, λₛ, tf)
+         return [λf]
+    end
+    S([5])
+    S! = (s, ξ) -> s[:] .= S(ξ)
+    # JS(ξ) = ForwardDiff.jacobian(p -> S(p), ξ)
+    # JS! = (js, ξ) -> js .= JS(ξ)
+    sol = fsolve(S!, [t_guess])
+    return tf - sol.x[1]
 end
